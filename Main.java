@@ -5,18 +5,27 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
+        Quiz quiz;
         System.out.println("こんにちは");
         System.out.println("第1問");
-        System.out.println("内容");
         try {
-            QuizLoader.load("README.md").forEach(System.out::println);
+            quiz = QuizLoader.load("question/001.txt");
         } catch (FileNotFoundException e){
             return;
         }
+        System.out.println(quiz.getQuestion());
         System.out.println("答えを選択肢から選んでください");
-        System.out.println(sc.nextLine());
-        System.out.println("正解");
+        for (int i=0; i < quiz.getChoices().size(); i++) {
+            System.out.print((i+1) + " ");
+            System.out.println(quiz.getChoices().get(i));
+        }
+        String choice = sc.nextLine();
+        if (quiz.check(choice)) {
+            System.out.println("正解");
+        } else {
+            System.out.println("不正解");
+            System.out.println("正解は" + quiz.getAnswer());
+        }
     }
 
 

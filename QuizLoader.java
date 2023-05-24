@@ -5,7 +5,8 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 
 public class QuizLoader {
-    public static List<String> load(String filename) throws FileNotFoundException{
+
+    public static Quiz load(String filename) throws FileNotFoundException{
         FileInputStream fis;
         try {
             fis = new FileInputStream(filename);
@@ -15,11 +16,18 @@ public class QuizLoader {
             throw e;
         }
         Scanner sc = new Scanner(fis, "UTF-8");
-        List<String> questions = new ArrayList<>();
-        while (sc.hasNext()) {
-            String line = sc.nextLine();
-            questions.add(line);
+        String questionType = sc.nextLine();
+        if (questionType.equals("select4")) {
+            String question = sc.nextLine();
+            List<String> choices = new ArrayList<>(4);
+            for (int i=0; i < 4; i++) {
+                choices.add(sc.nextLine());
+            }
+            String answer = sc.nextLine();
+            return new SelectionQuiz(question, choices, answer);
         }
-        return questions;
+        else {
+            throw new RuntimeException("サポートしてない問題形式です");
+        }
     }
 }
