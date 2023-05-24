@@ -1,7 +1,7 @@
 import java.util.List;
 
 /**
- * 様々な形式のクイズそれぞれが備える必要があるクラス
+ * 様々な形式のクイズそれぞれが備える必要があるインターフェイス
  */
 public interface Quiz {
     /**
