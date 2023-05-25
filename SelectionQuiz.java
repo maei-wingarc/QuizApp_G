@@ -4,9 +4,9 @@ import java.util.List;
  * 選択肢型のクイズ機能を提供する
  */
 public class SelectionQuiz implements Quiz{
-    final String question;
-    final List<String> choices;
-    final String answer;
+    final private String question;
+    final private List<String> choices;
+    final private String answer;
 
     /**
      * 選択肢型クイズクラスを初期化する
