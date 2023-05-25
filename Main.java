@@ -17,7 +17,7 @@ public class Main {
         System.out.println("こんにちは");
         System.out.println("第1問");
         try {
-            quiz = QuizLoader.load("question/001.txt");
+            quiz = QuizLoader.load("question/002.txt");
         } catch (FileNotFoundException e){
             return;
         }

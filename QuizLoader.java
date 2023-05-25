@@ -25,19 +25,30 @@ public class QuizLoader {
             System.out.println(filename + "はありません。");
             throw e;
         }
-        Scanner sc = new Scanner(fis, "UTF-8");
-        String questionType = sc.nextLine();
-        if (questionType.equals("select4")) {
-            String question = sc.nextLine();
-            List<String> choices = new ArrayList<>(4);
-            for (int i=0; i < 4; i++) {
-                choices.add(sc.nextLine());
+        try (Scanner sc = new Scanner(fis, "UTF-8")) {
+            String questionType = sc.nextLine();
+            if (questionType.equals("select4")) {
+                return createSelectionQuiz(sc, 4);
             }
-            String answer = sc.nextLine();
-            return new SelectionQuiz(question, choices, answer);
+            else if (questionType.equals("select3")) {
+            return createSelectionQuiz(sc, 3);
+            }
+            else if (questionType.equals("select2")) {
+                return createSelectionQuiz(sc, 2);
+            }
+            else {
+                throw new RuntimeException("サポートしてない問題形式です");
+            }
         }
-        else {
-            throw new RuntimeException("サポートしてない問題形式です");
+    }
+
+    private static SelectionQuiz createSelectionQuiz(Scanner sc, int n) {
+        String question = sc.nextLine();
+        List<String> choices = new ArrayList<>(n);
+        for (int i=0; i < n; i++) {
+            choices.add(sc.nextLine());
         }
+        String answer = sc.nextLine();
+        return new SelectionQuiz(question, choices, answer);
     }
 }
