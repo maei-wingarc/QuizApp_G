@@ -43,7 +43,7 @@ public class Game{
     }
 
     public void run() throws IOException, InterruptedException {
-        System.out.println("クイズです");
+        System.out.println("クイズだよ！");
         
         int solved = 0, challenged = 0;
         InputStreamReader isr = new InputStreamReader(System.in);
@@ -54,12 +54,13 @@ public class Game{
             try {
                 quiz = QuizLoader.load(dirname + "/" + getRandomFileName());
             } catch (FileNotFoundException e) {
-                System.out.println("こわれたよ！");
+                System.out.println("途中でファイル消したらだめだよ！！");
                 return;
             }
+            
             ++challenged;
             System.out.println(quiz.getQuestion());
-            System.out.println("答えを選択肢から選んでください");
+            System.out.println("答えを選択肢から選んでね！制限時間は10秒！");
             for (int i=0; i < quiz.getChoices().size(); i++) {
                 System.out.print((i+1) + " ");
                 System.out.println(quiz.getChoices().get(i));
@@ -72,6 +73,7 @@ public class Game{
                     System.out.println("正解は" + quiz.getAnswer());
                     break;
                 }
+                
                 if (isr.ready()) {
                     String choice = br.readLine();
                     if (quiz.check(choice)) {
@@ -105,6 +107,5 @@ public class Game{
             if(exitFlag) break;
         }
         System.out.println("またあそんでねー");
-        // scanner.close();
     }
 }
