@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class Game{
     private final String dirname;
@@ -32,7 +33,7 @@ public class Game{
         return fileNames;
     }
 
-    private String getRandomFileName(){
+    private String getQuizFileName(){
         if(nextQuizIndex == fileNames.size()){
             throw new RuntimeException("既にすべての問題を出題しています");
         }
@@ -50,62 +51,67 @@ public class Game{
         BufferedReader br = new BufferedReader(isr);
 
         while(true){
-            Quiz quiz;
-            try {
-                quiz = QuizLoader.load(dirname + "/" + getRandomFileName());
-            } catch (FileNotFoundException e) {
-                System.out.println("途中でファイル消したらだめだよ！！");
-                return;
-            }
+            Quiz quiz = QuizLoader.load(dirname + "/" + getQuizFileName());
             
             ++challenged;
-            System.out.println(quiz.getQuestion());
-            System.out.println("答えを選択肢から選んでね！制限時間は10秒！");
-            for (int i=0; i < quiz.getChoices().size(); i++) {
-                System.out.print((i+1) + " ");
-                System.out.println(quiz.getChoices().get(i));
-            }
-            
-            long startTime = System.currentTimeMillis();
-            while (true) {
-                if (System.currentTimeMillis() - startTime > 10000) {
-                    System.out.println("時間切れ");
-                    System.out.println("正解は" + quiz.getAnswer());
-                    break;
-                }
-                
-                if (isr.ready()) {
-                    String choice = br.readLine();
-                    if (quiz.check(choice)) {
-                        System.out.println("正解");
-                        ++solved;
-                    } else {
-                        System.out.println("不正解");
-                        System.out.println("正解は" + quiz.getAnswer());
-                    }
-                    break;
-                }
-                Thread.sleep(100);
-            }
+            dumpQuiz(quiz);
+            if(checkAnswer(isr, br, quiz)) ++solved;
 
             System.out.println("現在の正解数 " + solved + "問(" + challenged +"問中)"); 
             if (fileNames.size() == challenged) {
                 System.out.println("終わり！");
                 break;
             }
-            System.out.println("つづけますか (y/n)");
-            boolean exitFlag = false;
-            while(true){
-                String line = br.readLine();
-                if(line.equals("y")) break;
-                if(line.equals("n")){
-                    exitFlag = true;
-                    break;
-                }
-                System.out.println("y もしくは nを入力してください");
-            }
-            if(exitFlag) break;
+            
+            if(!checkExit(br)) break;
         }
         System.out.println("またあそんでねー");
+    }
+
+    private boolean checkAnswer(InputStreamReader isr, BufferedReader br, Quiz quiz)
+            throws IOException, InterruptedException {
+        long startTime = System.currentTimeMillis();
+        System.out.print("答えを書いてね! : ");
+        while (true) {
+            if (System.currentTimeMillis() - startTime > 10000) {
+                System.out.println("時間切れ");
+                System.out.println("正解は" + quiz.getAnswer());
+                break;
+            }
+
+            if (isr.ready()) {
+                String choice = br.readLine();
+                if (quiz.check(choice)) {
+                    System.out.println("正解");
+                    return true;
+                } else {
+                    System.out.println("不正解");
+                    System.out.println("正解は" + quiz.getAnswer());
+                    return false;
+                }
+            }
+            Thread.sleep(100);
+        }
+        return false;
+    }
+
+    private void dumpQuiz(Quiz quiz) {
+        System.out.println("\n======= 問題 =======");
+        System.out.println(quiz.getQuestion());
+        System.out.println("答えを選択肢から選んでね！制限時間は10秒！");
+        for (int i=0; i < quiz.getChoices().size(); i++) {
+            System.out.print((i+1) + " ");
+            System.out.println(quiz.getChoices().get(i));
+        }
+    }
+
+    public boolean checkExit(BufferedReader br) throws IOException{
+        System.out.println("つづけますか (y/n)");
+        String line = br.readLine();
+
+        if(line.charAt(line.length() - 1) == 'y') return true;
+        if(line.charAt(line.length() - 1) == 'n') return false;
+        System.out.println("y もしくは nを入力してください");
+        return checkExit(br);
     }
 }
