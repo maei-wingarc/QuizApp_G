@@ -1,30 +1,31 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 
 public class Game{
     private final String dirname;
     private final List<String> fileNames;
-    private final Set<String> challengedFileNamesSet;
     private final Random rand;
+    private int nextQuizIndex;
 
     public Game(String dirname) {
         this.dirname = dirname;
 
         fileNames = getAllQuestionFileNames();
-        challengedFileNamesSet = new HashSet<String>();
 
         rand = new Random(LocalDateTime.now().getNano());
+
+        nextQuizIndex = 0;
     }
 
     // {dirName}ディレクトリに含まれるすべてのファイル名を取得し、そのリストを返す
@@ -35,19 +36,17 @@ public class Game{
         for(File file: dir.listFiles()){
             fileNames.add(file.getName());
         }
+        Collections.shuffle(fileNames);
         return fileNames;
     }
 
     private String getRandomFileName(){
-        if(challengedFileNamesSet.size() == fileNames.size()){
+        if(nextQuizIndex == fileNames.size()){
             throw new RuntimeException("既にすべての問題を出題しています");
         }
-        int fileIndex = rand.nextInt(fileNames.size());
-        String fileName = fileNames.get(fileIndex);
-        if(challengedFileNamesSet.contains(fileName)){
-            return getRandomFileName();
-        }
-        challengedFileNamesSet.add(fileName);
+        String fileName = fileNames.get(nextQuizIndex);
+        ++nextQuizIndex;
+        
         return fileName;
     }
 
@@ -55,7 +54,6 @@ public class Game{
         System.out.println("クイズです");
         
         int solved = 0, challenged = 0;
-        // Scanner scanner = new Scanner(System.in);
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
 
@@ -65,7 +63,6 @@ public class Game{
                 quiz = QuizLoader.load(dirname + "/" + getRandomFileName());
             } catch (FileNotFoundException e) {
                 System.out.println("こわれたよ！");
-                // scanner.close();
                 return;
             }
             ++challenged;
