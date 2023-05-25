@@ -1,4 +1,8 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,10 +13,10 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Game{
-    private String dirname;
-    private List<String> fileNames;
-    private Set<String> challengedFileNamesSet;
-    private Random rand;
+    private final String dirname;
+    private final List<String> fileNames;
+    private final Set<String> challengedFileNamesSet;
+    private final Random rand;
 
     public Game(String dirname) {
         this.dirname = dirname;
@@ -47,18 +51,21 @@ public class Game{
         return fileName;
     }
 
-    public void run() {
+    public void run() throws IOException, InterruptedException {
         System.out.println("クイズです");
         
         int solved = 0, challenged = 0;
-        Scanner scanner = new Scanner(System.in);
+        // Scanner scanner = new Scanner(System.in);
+        InputStreamReader isr = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(isr);
+
         while(true){
             Quiz quiz;
             try {
                 quiz = QuizLoader.load(dirname + "/" + getRandomFileName());
             } catch (FileNotFoundException e) {
                 System.out.println("こわれたよ！");
-                scanner.close();
+                // scanner.close();
                 return;
             }
             ++challenged;
@@ -70,9 +77,15 @@ public class Game{
             }
             
             long startTime = System.currentTimeMillis();
-            while (System.currentTimeMillis() - startTime < 10000) {
-                if (scanner.hasNextLine()) {
-                    String choice = scanner.nextLine();
+            while (true) {
+                if (System.currentTimeMillis() - startTime > 10000) {
+                    System.out.println("時間切れ");
+                    System.out.println("正解は" + quiz.getAnswer());
+                    break;
+                }
+                System.in.skip(0);
+                if (isr.ready()) {
+                    String choice = br.readLine();
                     if (quiz.check(choice)) {
                         System.out.println("正解");
                         ++solved;
@@ -82,13 +95,18 @@ public class Game{
                     }
                     break;
                 }
+                Thread.sleep(100);
             }
 
             System.out.println("現在の正解数 " + solved + "問(" + challenged +"問中)"); 
+            if (fileNames.size() == challenged) {
+                System.out.println("終わり！");
+                break;
+            }
             System.out.println("つづけますか (y/n)");
             boolean exitFlag = false;
             while(true){
-                String line = scanner.nextLine();
+                String line = br.readLine();
                 if(line.equals("y")) break;
                 if(line.equals("n")){
                     exitFlag = true;
@@ -99,6 +117,6 @@ public class Game{
             if(exitFlag) break;
         }
         System.out.println("またあそんでねー");
-        scanner.close();
+        // scanner.close();
     }
 }
