@@ -1,8 +1,16 @@
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
+/**
+ * プログラムのエントリーポイントとなるクラス
+ */
 public class Main {
 
+    /**
+     * プログラムのエントリーポイント
+     * 
+     * @param args 実行時引数 (今回のプログラムでは使用していない)
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Quiz quiz;

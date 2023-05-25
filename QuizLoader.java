@@ -4,8 +4,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
+/**
+ * クイズ定義ファイルを読み込む機能をまとめたクラス
+ */
 public class QuizLoader {
 
+    /**
+     * ファイル一つを行分割のリストで読み込む
+     * 
+     * @param filename クイズ定義ファイルへのパス
+     * @return ファイルに書き込まれている内容から生成した{Quiz}
+     * @throws FileNotFoundException ファイルが存在しなかった
+     */
     public static Quiz load(String filename) throws FileNotFoundException{
         FileInputStream fis;
         try {

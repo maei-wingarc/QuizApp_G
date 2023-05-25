@@ -1,0 +1,7 @@
+select4
+ウイングアーク１ｓｔ株式会社が手掛ける高速な集計に強みを持つDBMSはどれでしょう
+SVF
+dejiren
+Dr.Sum
+MotionBoard
+3
