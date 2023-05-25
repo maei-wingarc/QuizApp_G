@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,19 +51,54 @@ public class Game{
         System.out.println("クイズです");
         
         int solved = 0, challenged = 0;
-        // Scanner scanner = new Scanner(System.in);
-        // while(true){
+        Scanner scanner = new Scanner(System.in);
+        while(true){
+            Quiz quiz;
+            try {
+                quiz = QuizLoader.load(dirname + "/" + getRandomFileName());
+            } catch (FileNotFoundException e) {
+                System.out.println("こわれたよ！");
+                scanner.close();
+                return;
+            }
+            ++challenged;
+            System.out.println(quiz.getQuestion());
+            System.out.println("答えを選択肢から選んでください");
+            for (int i=0; i < quiz.getChoices().size(); i++) {
+                System.out.print((i+1) + " ");
+                System.out.println(quiz.getChoices().get(i));
+            }
+            
+            long startTime = System.currentTimeMillis();
+            while (System.currentTimeMillis() - startTime < 10000) {
+                if (scanner.hasNextLine()) {
+                    String choice = scanner.nextLine();
+                    if (quiz.check(choice)) {
+                        System.out.println("正解");
+                        ++solved;
+                    } else {
+                        System.out.println("不正解");
+                        System.out.println("正解は" + quiz.getAnswer());
+                    }
+                    break;
+                }
+            }
 
-        //     long startTime = System.currentTimeMillis();
-        //     while (System.currentTimeMillis() - startTime < 10000) {
-        //         if (scanner.hasNextLine()) {
-        //             String line = scanner.nextLine();
-        //             System.out.println("You entered: " + line);
-        //             break;
-        //         }
-        //     }
-        // }
-        
-        // scanner.close();
+            System.out.println("現在の正解数 " + solved + "問(" + challenged +"問中)"); 
+            System.out.println("つづけますか (y/n)");
+            boolean exitFlag = false;
+            while(true){
+                String line = scanner.nextLine();
+                if(line.equals("y")) break;
+                if(line.equals("n")){
+                    exitFlag = true;
+                    break;
+                }
+                System.out.println("y もしくは nを入力してください");
+            }
+            if(exitFlag) break;
+        }
+        System.out.println("またあそんでねー");
+        scanner.close();
     }
 }
