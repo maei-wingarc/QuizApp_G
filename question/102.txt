@@ -1,0 +1,5 @@
+select2
+2^10byteを表す単位は？
+KB
+KiB
+2

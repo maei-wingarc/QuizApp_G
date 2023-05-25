@@ -1,0 +1,7 @@
+select4
+次のうち、Javaにおいてprimitive typeでないのは？
+int
+double
+char
+String
+4
