@@ -83,7 +83,6 @@ public class Game{
                     System.out.println("正解は" + quiz.getAnswer());
                     break;
                 }
-                System.in.skip(0);
                 if (isr.ready()) {
                     String choice = br.readLine();
                     if (quiz.check(choice)) {
