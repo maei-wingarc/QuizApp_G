@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 /**
  * プログラムのエントリーポイントとなるクラス
  */
@@ -10,6 +12,11 @@ public class Main {
      */
     public static void main(String[] args) {
         Game game = new Game("question");
-        game.run();
+        try {
+            game.run();
+        } catch (IOException | InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
