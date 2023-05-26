@@ -57,7 +57,6 @@ public class QuizLoader {
         while (sc.hasNext()) {
             answers.add(sc.nextLine());
         }
-        if (answers.isEmpty()) throw new RuntimeException("記述問題の正答が空です");
         return new DescriptionQuiz(question, answers);
     }
 }

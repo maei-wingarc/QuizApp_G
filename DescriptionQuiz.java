@@ -16,6 +16,7 @@ public class DescriptionQuiz implements Quiz {
      * @param answer 正答と別解のリスト
      */
     public DescriptionQuiz(String question, List<String> answers) {
+        if (answers.isEmpty()) throw new RuntimeException("記述問題の正答が空です");
         this.question = question;
         this.answers = answers;
     }
