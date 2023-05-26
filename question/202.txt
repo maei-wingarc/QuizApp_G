@@ -1,0 +1,5 @@
+description
+JavaのCollection APIで提供されている辞書型の実装クラスを一つ挙げよ
+HashMap
+TreeMap
+LinkedHashMap
