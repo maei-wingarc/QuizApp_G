@@ -1,0 +1,3 @@
+description
+JetBrainsが2011年にリリースし、Androidアプリケーション開発の推奨言語とされているJVM言語は？
+Kotlin

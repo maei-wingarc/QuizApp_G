@@ -27,16 +27,17 @@ public class QuizLoader {
         }
         try (Scanner sc = new Scanner(fis, "UTF-8")) {
             String questionType = sc.nextLine();
-            if (!questionType.startsWith("select")) {
+            if (questionType.startsWith("select")) {
+                int selectionCount = Integer.parseInt(questionType, 6, questionType.length(), 10);
+                if (selectionCount < 2) {
+                    throw new RuntimeException("選択肢の数が少なすぎます");
+                }
+                return createSelectionQuiz(sc, selectionCount);
+            } else if (questionType.startsWith("description")) {
+                return createDescriptionQuiz(sc);
+            } else {
                 throw new RuntimeException("サポートしてない問題形式です");
             }
-
-            int selectionCount = Integer.parseInt(questionType, 6, questionType.length(), 10);
-            if (selectionCount < 2) {
-                throw new RuntimeException("選択肢の数が少なすぎます");
-            }
-
-            return createSelectionQuiz(sc, selectionCount);
         }
     }
 
@@ -48,5 +49,11 @@ public class QuizLoader {
         }
         String answer = sc.nextLine();
         return new SelectionQuiz(question, choices, answer);
+    }
+
+    private static DescriptionQuiz createDescriptionQuiz(Scanner sc) {
+        String question = sc.nextLine();
+        String answer = sc.nextLine();
+        return new DescriptionQuiz(question, answer);
     }
 }
