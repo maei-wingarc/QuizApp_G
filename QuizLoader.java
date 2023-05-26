@@ -2,8 +2,6 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.io.FileNotFoundException;
 
 /**
