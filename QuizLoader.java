@@ -33,10 +33,8 @@ public class QuizLoader {
                     throw new RuntimeException("選択肢の数が少なすぎます");
                 }
                 return createSelectionQuiz(sc, selectionCount);
-            } else if (questionType.equals("description")) {
-                String question = sc.nextLine();
-                String answer = sc.nextLine();
-                return new DescriptionQuiz(question, answer);
+            } else if (questionType.startsWith("description")) {
+                return createDescriptionQuiz(sc);
             } else {
                 throw new RuntimeException("サポートしてない問題形式です");
             }
@@ -51,5 +49,11 @@ public class QuizLoader {
         }
         String answer = sc.nextLine();
         return new SelectionQuiz(question, choices, answer);
+    }
+
+    private static DescriptionQuiz createDescriptionQuiz(Scanner sc) {
+        String question = sc.nextLine();
+        String answer = sc.nextLine();
+        return new DescriptionQuiz(question, answer);
     }
 }
