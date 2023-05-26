@@ -110,8 +110,8 @@ public class Game{
         String line = br.readLine();
         if(line == null) return false;
 
-        if(line.length() > 0 && line.charAt(line.length() - 1) == 'y') return true;
-        if(line.length() > 0 && line.charAt(line.length() - 1) == 'n') return false;
+        if(line.endsWith("y")) return true;
+        if(line.endsWith("n")) return false;
         System.out.println("y もしくは nを入力してください");
         return checkExit(br);
     }
