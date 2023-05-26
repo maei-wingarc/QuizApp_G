@@ -22,6 +22,7 @@ public class DescriptionQuiz implements Quiz {
 
     /**
      * 記述型クイズクラスを初期化する
+     * 答えが一つだけのとき用、互換性のため
      * 
      * @param question 問題文
      * @param answer 正答
