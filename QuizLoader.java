@@ -53,7 +53,10 @@ public class QuizLoader {
 
     private static DescriptionQuiz createDescriptionQuiz(Scanner sc) {
         String question = sc.nextLine();
-        String answer = sc.nextLine();
-        return new DescriptionQuiz(question, answer);
+        List<String> answers = new ArrayList<>();
+        while (sc.hasNext()) {
+            answers.add(sc.nextLine());
+        }
+        return new DescriptionQuiz(question, answers);
     }
 }
