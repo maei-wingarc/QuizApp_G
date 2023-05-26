@@ -2,6 +2,8 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.io.FileNotFoundException;
 
 /**
@@ -53,7 +55,11 @@ public class QuizLoader {
 
     private static DescriptionQuiz createDescriptionQuiz(Scanner sc) {
         String question = sc.nextLine();
-        String answer = sc.nextLine();
-        return new DescriptionQuiz(question, answer);
+        List<String> answers = new ArrayList<>();
+        while (sc.hasNext()) {
+            answers.add(sc.nextLine());
+        }
+        if (answers.isEmpty()) throw new RuntimeException("記述問題の正答が空です");
+        return new DescriptionQuiz(question, answers);
     }
 }
