@@ -108,6 +108,7 @@ public class Game{
     public static boolean checkExit(BufferedReader br) throws IOException{
         System.out.println("つづけますか (y/n)");
         String line = br.readLine();
+        if(line == null) return false;
 
         if(line.charAt(line.length() - 1) == 'y') return true;
         if(line.charAt(line.length() - 1) == 'n') return false;
