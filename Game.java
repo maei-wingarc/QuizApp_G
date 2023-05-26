@@ -105,7 +105,7 @@ public class Game{
         }
     }
 
-    public boolean checkExit(BufferedReader br) throws IOException{
+    public static boolean checkExit(BufferedReader br) throws IOException{
         System.out.println("つづけますか (y/n)");
         String line = br.readLine();
 
